@@ -1,0 +1,77 @@
+version: '3'
+
+services:
+  webserver:
+    build: ./services/nginx
+    hostname: webserver
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+    volumes:
+      - ./www:/usr/local/apache2/htdocs
+    # links:
+      # - php:php
+    networks:
+      - app-network
+
+  # php:
+  #   build: ./services/php
+  #   hostname: php
+
+  #   volumes:
+  #     - ./www:/usr/local/apache2/htdocs
+  #   links:
+  #     - mysql:db
+  #     - mailhog:mailhog
+  #   environment:
+  #     LOCAL_USER_ID: ${LOCAL_USER_ID}
+  #     XDEBUG_CONFIG: remote_connect_back=${XDEBUG_REMOTE_CONNECT_BACK} idekey=${XDEBUG_IDEKEY} remote_host=${XDEBUG_REMOTE_HOST} remote_port=${XDEBUG_REMOTE_PORT}
+  #   networks:
+  #     - app-network
+
+  # mysql:
+  #   build: ./services/mysql
+  #   hostname: mysql
+
+  #   volumes:
+  #     - mysql-data:/var/lib/mysql
+  #     - ./www:/usr/local/apache2/htdocs
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     MYSQL_DATABASE: ${MYSQL_DATABASE}
+  #     MYSQL_USER: ${MYSQL_USER}
+  #     MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+  #     MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #   networks:
+  #     - app-network
+
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin:4.7.7-1
+
+  #   ports:
+  #     - "80:80"
+  #   links:
+  #     - mysql:db
+  #   environment:
+  #     PMA_USER: root
+  #     PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+  #   networks:
+  #     - app-network
+  # mailhog:
+  #   image: mailhog/mailhog:v1.0.0
+
+  #   ports:
+  #     - "1025:1025"
+  #     - "8025:8025"
+  #   networks:
+  #     - app-network
+
+volumes:
+  mysql-data:
+
+networks:
+  app-network:
+    driver: bridge
